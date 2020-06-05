@@ -24,16 +24,16 @@ if [ ! -f ${DATA_DIR}/CSMM/app.js ]; then
     npm install --only=prod
 	npm itemIcons:update
     if [ -d ${DATA_DIR}/.cache ]; then
-		rm -R ${DATA_DIR}/.cache
+		rm -fR ${DATA_DIR}/.cache
     fi
     if [ -d ${DATA_DIR}/.npm ]; then
-		rm -R ${DATA_DIR}/.npm
+		rm -fR ${DATA_DIR}/.npm
     fi
     if [ -d ${DATA_DIR}/.config ]; then
-		rm -R ${DATA_DIR}/.config
+		rm -fR ${DATA_DIR}/.config
     fi
     if [ -f ${DATA_DIR}/.wget-hsts ]; then
-		rm ${DATA_DIR}/.wget-hsts
+		rm -f ${DATA_DIR}/.wget-hsts
     fi
     find ${DATA_DIR} -name ".config" -exec rm -R -f {} \;
     find ${DATA_DIR} -name ".npm" -exec rm -R -f {} \;
@@ -43,7 +43,7 @@ if [ ! -f ${DATA_DIR}/CSMM/app.js ]; then
 elif [ "${FORCE_UPDATE}" == "true" ]; then
 	echo "---Force Update activated, installing CSMM---"
     cd ${DATA_DIR}
-    rm -R ${DATA_DIR}/CSMM
+    rm -fR ${DATA_DIR}/CSMM
     if wget -q -nc --show-progress --progress=bar:force:noscroll ${CSMM_DL_URL} ; then
     	echo "---CSMM successfully downloaded, please wait---"
     else
@@ -57,13 +57,13 @@ elif [ "${FORCE_UPDATE}" == "true" ]; then
     npm install --only=prod
 	npm itemIcons:update
     if [ -d ${DATA_DIR}/.cache ]; then
-		rm -R ${DATA_DIR}/.cache
+		rm -fR ${DATA_DIR}/.cache
     fi
     if [ -d ${DATA_DIR}/.npm ]; then
-		rm -R ${DATA_DIR}/.npm
+		rm -fR ${DATA_DIR}/.npm
     fi
     if [ -d ${DATA_DIR}/.config ]; then
-		rm -R ${DATA_DIR}/.config
+		rm -fR ${DATA_DIR}/.config
     fi
     if [ -f ${DATA_DIR}/.wget-hsts ]; then
 		rm ${DATA_DIR}/.wget-hsts
