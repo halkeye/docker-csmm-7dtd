@@ -26,7 +26,7 @@ docker run --name CSMM -d \
     --env 'HOSTNAME=https://www.server.org' \
     --env 'STEAM_API_KEY=placeyourkeyhere' \
     --env 'DB_BKP_INTERV=90' \
-    --env 'CSMM_DL_URL=https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/archive/master.zip' \
+    --env 'CSMM_DL_URL=https://github.com/CatalysmsServerManager/7-days-to-die-server-manager/archive/master.tar.gz' \
     --env 'UID=99' \
     --env 'GID=100' \
     --volume /mnt/user/appdata/csmm:/csmm-7dtd \

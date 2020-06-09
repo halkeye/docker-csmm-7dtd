@@ -7,34 +7,26 @@ echo "---Starting Redis Server---"
 screen -S RedisServer -L -Logfile ${DATA_DIR}/RedisLog.0 -d -m /usr/bin/redis-server
 sleep 5
 
+# rewrite zip to tar.gz
+CSMM_DL_URL=$(echo "$CSMM_DL_URL" | sed 's!\.zip$!.tar.gz!')
+mkdir -p ${DATA_DIR}/CSMM
+
 echo "---Checking if CSMM is installed---"
 if [ ! -f ${DATA_DIR}/CSMM/app.js ]; then
-	echo "---CSMM not found, installing---"
+    echo "---CSMM not found, installing---"
     cd ${DATA_DIR}
-    if wget -q -nc --show-progress --progress=bar:force:noscroll ${CSMM_DL_URL} ; then
+    if wget -O "${DATA_DIR}/download.tgz" -q -nc --show-progress --progress=bar:force:noscroll ${CSMM_DL_URL} ; then
     	echo "---CSMM successfully downloaded, please wait---"
     else
     	echo "---Can't download CSMM, putting server into sleep mode---"
-        sleep infinity
+      sleep infinity
     fi
-    unzip -q ${DATA_DIR}/master.zip
-    rm ${DATA_DIR}/master.zip
-    mv ${DATA_DIR}/7-days-to-die-server-manager-master ${DATA_DIR}/CSMM
-    cd ${DATA_DIR}/CSMM
+    tar xzf "${DATA_DIR}/download.tgz" --strip-components=1 -C "${DATA_DIR}/CSMM"
+    rm -rf "${DATA_DIR}/download.tgz"
+    cd "${DATA_DIR}/CSMM"
     npm install --only=prod
-	npm run itemIcons:update
-    if [ -d ${DATA_DIR}/.cache ]; then
-		rm -R ${DATA_DIR}/.cache
-    fi
-    if [ -d ${DATA_DIR}/.npm ]; then
-		rm -R ${DATA_DIR}/.npm
-    fi
-    if [ -d ${DATA_DIR}/.config ]; then
-		rm -R ${DATA_DIR}/.config
-    fi
-    if [ -f ${DATA_DIR}/.wget-hsts ]; then
-		rm ${DATA_DIR}/.wget-hsts
-    fi
+    npm run itemIcons:update
+    rm -Rf ${DATA_DIR}/{.cache,.npm,.config,.wget-hsts}
     find ${DATA_DIR} -name ".config" -exec rm -R -f {} \;
     find ${DATA_DIR} -name ".npm" -exec rm -R -f {} \;
     find ${DATA_DIR} -name ".wget-hsts" -exec rm -R -f {} \;
@@ -44,30 +36,18 @@ elif [ "${FORCE_UPDATE}" == "true" ]; then
 	echo "---Force Update activated, installing CSMM---"
     cd ${DATA_DIR}
     rm -R ${DATA_DIR}/CSMM
-    if wget -q -nc --show-progress --progress=bar:force:noscroll ${CSMM_DL_URL} ; then
+    if wget -O "${DATA_DIR}/download.tgz" -q -nc --show-progress --progress=bar:force:noscroll ${CSMM_DL_URL} ; then
     	echo "---CSMM successfully downloaded, please wait---"
     else
     	echo "---Can't download CSMM, putting server into sleep mode---"
-        sleep infinity
+      sleep infinity
     fi
-    unzip -q ${DATA_DIR}/master.zip
-    rm ${DATA_DIR}/master.zip
-    mv ${DATA_DIR}/7-days-to-die-server-manager-master ${DATA_DIR}/CSMM
-    cd ${DATA_DIR}/CSMM
+    tar xzf "${DATA_DIR}/download.tgz" --strip-components=1 -C "${DATA_DIR}/CSMM"
+    rm -rf "${DATA_DIR}/download.tgz"
+    cd "${DATA_DIR}/CSMM"
     npm install --only=prod
-	npm run itemIcons:update
-    if [ -d ${DATA_DIR}/.cache ]; then
-		rm -R ${DATA_DIR}/.cache
-    fi
-    if [ -d ${DATA_DIR}/.npm ]; then
-		rm -R ${DATA_DIR}/.npm
-    fi
-    if [ -d ${DATA_DIR}/.config ]; then
-		rm -R ${DATA_DIR}/.config
-    fi
-    if [ -f ${DATA_DIR}/.wget-hsts ]; then
-		rm ${DATA_DIR}/.wget-hsts
-    fi
+	  npm run itemIcons:update
+    rm -Rf ${DATA_DIR}/{.cache,.npm,.config,.wget-hsts}
     cp ${DATA_DIR}/CSMM/.env.example ${DATA_DIR}/CSMM/.env
     echo "---Force Update finished, CSMM successfully installed---"
 else
